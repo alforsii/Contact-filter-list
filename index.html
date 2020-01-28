@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css"
+    />
+    <title>Contacts | Home</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="center-align">Add Contacts</h1>
+      <label for="name">Name:</label>
+      <input type="text" id="name" />
+      <label for="phone">Phone number:</label>
+      <input type="text" id="phone" />
+      <h1 class="center-align">
+        <input class="btn" type="submit" />
+      </h1>
+    </div>
+
+    <div class="container">
+      <h1 class="center-align">Contacts</h1>
+      <a href="./add-contact.html"><h5>add</h5></a>
+      <input type="search" id="filterInput" placeholder="Search names..." />
+      <ul class="collection with-header" id="names">
+        <li class="collection-header"><h5>A</h5></li>
+        <li class="collection-item"><a href="#">Abe</a></li>
+        <li class="collection-item"><a href="#">Adam</a></li>
+        <li class="collection-item"><a href="#">Alan</a></li>
+        <li class="collection-item"><a href="#">Anna</a></li>
+        <li class="collection-header"><h5>B</h5></li>
+        <li class="collection-item"><a href="#">Bob</a></li>
+        <li class="collection-item"><a href="#">Bobir</a></li>
+        <li class="collection-item"><a href="#">Bek</a></li>
+        <li class="collection-item"><a href="#">Boomer</a></li>
+        <li class="collection-header"><h5>C</h5></li>
+        <li class="collection-item"><a href="#">Conan</a></li>
+        <li class="collection-item"><a href="#">Code</a></li>
+        <li class="collection-item"><a href="#">Canvas</a></li>
+        <li class="collection-item"><a href="#">Cooper</a></li>
+      </ul>
+    </div>
+    <!-- script tag -->
+    <script src="./index.js"></script>
+  </body>
+</html>
