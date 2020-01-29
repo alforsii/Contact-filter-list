@@ -44,9 +44,9 @@ window.addEventListener('load', () => {
 //Local Storage
 class Storage {
   // 1.Save all names to a local storage for reuse
+  //localStorage.setItem(nameOfSavingVariable,JSON.stringify(array))
+  //need to stringify to JSON to save and obviously JSON.parse(toParseJsonSting)
   static saveNames(names) {
-    //localStorage.setItem(nameOfSavingVariable,JSON.stringify(array))
-    //need to stringify to JSON to save and obviously JSON.parse(toParseJsonSting)
     localStorage.setItem('contacts', JSON.stringify(names));
   }
   // 2.Get the names from local storage that we saved
@@ -60,8 +60,8 @@ class Storage {
 // Save, reset and display
 function addName() {
   //1.Get input value
-  let name = document.getElementById('name').value;
-  let phone = document.getElementById('phone').value;
+  const name = document.getElementById('name').value,
+    phone = document.getElementById('phone').value;
   if (name !== '') {
     //2.If (name ) save it to contacts
     saveToContacts(name, phone);
@@ -102,27 +102,25 @@ function saveToContacts(name, phone) {
 function filterNames() {
   //get input value
   let filterValue = document.getElementById('filterInput').value.toUpperCase();
-  //get ul
-  let ul = document.getElementById('names');
   //get li's
   let li = document.querySelectorAll('li.collection-item');
-  //loop thru collection-item li's
-  for (let i = 0; i < li.length; i++) {
+  //loop thru collection-item - li's
+  for (let j = 0; j < li.length; j++) {
     //there's only one elem inside li, which is a tag
     // and li[i].getElementsByTagName('a') returns array [a], so it's in 0 position
     //let's grab it
-    let a = li[i].getElementsByTagName('a')[0];
+    let a = li[j].getElementsByTagName('a')[0];
     //now we need to look innerText of each a tag if match
     let name = a.innerHTML.toUpperCase();
-    //now we check for match, none match display none
+    //now we check for match,if no match display none, else remove display none
     name.indexOf(filterValue) === -1
-      ? (li[i].style.display = 'none')
-      : (li[i].style.display = '');
+      ? (li[j].style.display = 'none')
+      : (li[j].style.display = '');
   }
-  //let's do the same with header li's
+  //let's do the same with header h5
   let indexH5 = document.querySelectorAll('ul.collection-header h5');
   for (let i = 0; i < indexH5.length; i++) {
-    let indexName = indexH5[i].innerHTML;
+    let indexName = indexH5[i].innerHTML; //it's already upperCase
     //now we check for match, none match display none
     indexName.indexOf(filterValue.substr(0, 1)) === -1
       ? (indexH5[i].style.display = 'none')
@@ -138,10 +136,10 @@ function displayNames() {
   let allNames = contacts.sort((a, b) =>
     a.name.toLowerCase() > b.name.toLowerCase() ? 1 : a.name < b.name ? -1 : 0
   ); // Storage.getNames();
-  console.log('Output for: displayNames -> allNames', allNames);
+  //   console.log('Output for: displayNames -> allNames', allNames);
   if (allNames.length > 0) {
     for (let i = 0; i < allNames.length; i++) {
-      // if( ul.length >1) ul
+      //second loop looks for every name right place in innerUlH5.parentElement by matching it's first letters with the index headers. For example if innerUlH5 which is H5 tag innerText -if it's A and name starts with A or a will be inserted to that parent of <h5>.
       for (let j = 0; j < innerUlH5.length; j++) {
         if (
           innerUlH5[j].innerHTML === allNames[i].name.substr(0, 1).toUpperCase()
