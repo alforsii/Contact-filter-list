@@ -1,0 +1,13 @@
+.btn-danger {
+  background: transparent;
+  border: none;
+  color: red;
+}
+.btn-danger:hover {
+  background-color: red;
+  color: #fff;
+}
+.collection-item {
+  display: flex;
+  justify-content: space-between;
+}

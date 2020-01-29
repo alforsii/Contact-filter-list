@@ -39,6 +39,12 @@ window.addEventListener('load', () => {
   createHeader();
   //3.Display if any names in the storage
   displayNames();
+  //4. Delete contacts
+  const btns = document.querySelectorAll('.btn-danger');
+  console.log('Output for: contacts', contacts);
+  for (let i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', deleteContact);
+  }
 });
 
 //Local Storage
@@ -64,7 +70,7 @@ function addName() {
     phone = document.getElementById('phone').value;
   if (name !== '') {
     //2.If (name ) save it to contacts
-    saveToContacts(name, phone);
+    saveToContacts(name, phone, getId());
     //3.and reset contact list to none
     document.getElementById('names').innerHTML = '';
     //4.create new index headers
@@ -75,6 +81,19 @@ function addName() {
   //6. Reset input value to none
   document.getElementById('name').value = '';
   document.getElementById('phone').value = '';
+}
+
+//get id
+function getId() {
+  // Math.random should be unique because of its seeding algorithm.
+  // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+  // after the decimal.
+  return (
+    '_' +
+    Math.random()
+      .toString(36)
+      .substr(2, 9)
+  );
 }
 
 //Creates  <ul class="collection-header"> <h5> a_z[i] </h5> </ul>
@@ -93,8 +112,8 @@ function createHeader() {
 }
 
 // Reassigns contacts array above by adding a new contact, and Saves the created contact name and phone number to the localStorage
-function saveToContacts(name, phone) {
-  contacts = [...contacts, { name, phone }];
+function saveToContacts(name, phone, _id) {
+  contacts = [...contacts, { name, phone, _id }];
   Storage.saveNames(contacts);
 }
 
@@ -146,11 +165,21 @@ function displayNames() {
         ) {
           let newLi = document.createElement('li');
           newLi.classList.add('collection-item');
-          newLi.innerHTML = `<a href="#">${allNames[i].name}</a>`;
+          newLi.innerHTML = `
+          <a href="#">${allNames[i].name}</a>
+          <button id="${allNames[i]._id}" class="btn btn-danger">Delete</button>`;
           innerUlH5[j].parentElement.appendChild(newLi);
           innerUlH5[j].parentElement.style.display = '';
         }
       }
     }
   }
+}
+
+// Delete and Update
+function deleteContact(e) {
+  // console.log(e.target);
+  contacts = contacts.filter(contact => contact._id !== e.target.id);
+  e.target.parentElement.remove();
+  Storage.saveNames(contacts);
 }
