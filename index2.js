@@ -1,7 +1,6 @@
-document.getElementById('filterInput').addEventListener('keyup', filterNames);
-document.querySelector('.btn').addEventListener('click', addName);
-let arrOfNames = [];
 let contacts = [];
+document.querySelector('.btn').addEventListener('click', addName);
+document.getElementById('filterInput').addEventListener('keyup', filterNames);
 const a_z = [
   'A',
   'B',
@@ -31,35 +30,54 @@ const a_z = [
   'Z',
   '#',
 ];
+
+// 1. On load window get the contacts list from the local storage, assign contacts array from storage array list if any, create index header tags  and display all existing contacts
+window.addEventListener('load', () => {
+  //1.after window load assign contact with array from localStorage that was saved
+  contacts = Storage.getNames();
+  //2.create index header
+  createHeader();
+  //3.Display if any names in the storage
+  displayNames();
+});
+
 //Local Storage
 class Storage {
-  //1 Save all names to a local storage for reuse
+  // 1.Save all names to a local storage for reuse
   static saveNames(names) {
-    //localStorage.setItem(nameOfSavingVariable,JSON.stringify(names))
+    //localStorage.setItem(nameOfSavingVariable,JSON.stringify(array))
     //need to stringify to JSON to save and obviously JSON.parse(toParseJsonSting)
     localStorage.setItem('contacts', JSON.stringify(names));
   }
-  //2 Get the name by id from local storage that we saved
+  // 2.Get the names from local storage that we saved
   static getNames() {
     return localStorage.getItem('contacts')
       ? JSON.parse(localStorage.getItem('contacts'))
       : [];
   }
 }
+
+// Save, reset and display
 function addName() {
+  //1.Get input value
   let name = document.getElementById('name').value;
   let phone = document.getElementById('phone').value;
-  //create tag and add the name to it
   if (name !== '') {
+    //2.If (name ) save it to contacts
     saveToContacts(name, phone);
+    //3.and reset contact list to none
     document.getElementById('names').innerHTML = '';
+    //4.create new index headers
     createHeader();
+    //5.and then display names
     displayNames();
-    // generateTag(name);
   }
+  //6. Reset input value to none
   document.getElementById('name').value = '';
   document.getElementById('phone').value = '';
 }
+
+//Creates  <ul class="collection-header"> <h5> a_z[i] </h5> </ul>
 function createHeader() {
   let ul = document.getElementById('names');
   let innerUlH5 = document.querySelectorAll('.collection-header h5');
@@ -74,26 +92,13 @@ function createHeader() {
   }
 }
 
+// Reassigns contacts array above by adding a new contact, and Saves the created contact name and phone number to the localStorage
 function saveToContacts(name, phone) {
   contacts = [...contacts, { name, phone }];
   Storage.saveNames(contacts);
 }
 
-// function generateTag(val) {
-//   let innerUlH5 = document.querySelectorAll('.collection-header h5');
-//   for (let i = 0; i < innerUlH5.length; i++) {
-//     if (innerUlH5[i].innerHTML === val.substr(0, 1).toUpperCase()) {
-//       let newLi = document.createElement('li');
-//       newLi.classList.add('collection-item');
-//       newLi.innerHTML = `<a href="#">${val}</a>`;
-//       innerUlH5[i].parentElement.appendChild(newLi);
-//       innerUlH5[i].parentElement.style.display = '';
-//       return;
-//     }
-//   }
-//   sortNames();
-// }
-
+// Filters Contacts list when is typed in the search input
 function filterNames() {
   //get input value
   let filterValue = document.getElementById('filterInput').value.toUpperCase();
@@ -124,28 +129,15 @@ function filterNames() {
       : (indexH5[i].style.display = '');
   }
 }
-function sortNames() {
-  //get li's
-  let aTag = document.querySelectorAll('li.collection-item a');
-  //1.Get all the names and push to arrOfNames above
-  if (aTag.length > 1) {
-    for (let i = 0; i < aTag.length; i++) arrOfNames.push(aTag[i].innerHTML);
-    //2. Sort arrOfNames
-    arrOfNames.sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
-    //3.Replace a tag inner with sorted names
-    for (let i = 0; i < aTag.length; i++)
-      aTag[i].innerHTML = `${arrOfNames[i]}`;
-  }
-  //   console.log('Output for: sortNames -> arrOfNames', arrOfNames);
-  arrOfNames = [];
-}
 
-// sortNames();
-// generateTag();
+// Displays contacts from localStorage
 function displayNames() {
-  //get names
-  let allNames = contacts; // Storage.getNames();
+  //index header
   let innerUlH5 = document.querySelectorAll('.collection-header h5');
+  //get names
+  let allNames = contacts.sort((a, b) =>
+    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : a.name < b.name ? -1 : 0
+  ); // Storage.getNames();
   console.log('Output for: displayNames -> allNames', allNames);
   if (allNames.length > 0) {
     for (let i = 0; i < allNames.length; i++) {
@@ -164,11 +156,3 @@ function displayNames() {
     }
   }
 }
-window.addEventListener('load', () => {
-  //after window load assign contact with sorted array from localStorage that was saved
-  contacts = Storage.getNames().sort((a, b) =>
-    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : a.name < b.name ? -1 : 0
-  );
-  createHeader();
-  displayNames();
-});
